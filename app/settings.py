@@ -33,11 +33,13 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'api',
-    'rest_framework',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'drf_yasg',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -81,3 +83,8 @@ DATABASES = {
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
     }
 }
+
+STATIC_URL = os.path.join(BASE_DIR, 'static/')
+STATICFILE_DIRS = [
+    os.path.join(BASE_DIR, 'static/')
+]

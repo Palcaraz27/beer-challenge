@@ -1,0 +1,5 @@
+#####################################################
+################### STATIC FILES ####################
+#####################################################
+This is where those static files would be located.
+Required for django.contrib.staticfiles
