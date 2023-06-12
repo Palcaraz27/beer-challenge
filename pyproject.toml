@@ -16,10 +16,14 @@ coverage = "^6.3.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.2"
+pytest-django = "^4.5.2"
 
 [tool.django-stubs]
-django_settings_module = "app.settings"
+django_settings_module = "app.settings.base"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "app.settings.base"
