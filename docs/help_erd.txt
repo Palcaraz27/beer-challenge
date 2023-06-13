@@ -1,0 +1,3 @@
+For this problem, consider:
+- There cannot be a dispenser that does not have a beer associated with it.
+- The festival is celebrated in Murcia, the origin of the famous Estrella Levante, so any dispenser created must have this beer associated with it.
