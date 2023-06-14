@@ -2,7 +2,7 @@ from django.db import migrations
 
 def create_default_beer(apps, schema_editor):
     Beer = apps.get_model('festival', 'Beer')
-    Beer.objects.create(name='Estrella Levante', price=1)
+    Beer.objects.create(id= 1, name='Estrella Levante', price=1)
 
 def remove_default_beer(apps, schema_editor):
     Beer = apps.get_model('festival', 'Beer')
