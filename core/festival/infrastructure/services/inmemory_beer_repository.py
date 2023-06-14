@@ -1,5 +1,5 @@
-from typing import List
-from core.festival.domain.beer import Beer
+from typing import List, Optional
+from core.festival.domain.beer import Beer, BeerId
 from core.festival.domain.beer_repository import BeerRepository
 
 
@@ -12,4 +12,10 @@ class InMemoryBeerRepository(BeerRepository):
 
         if beer_found is None:
             self._beers.append(beer)
-        
+
+    async def get_by_id(self, beer_id: BeerId) -> Optional[Beer]:
+        beer_found = next(
+            filter(lambda beer: beer_id == beer.beer_id, self._beers), None
+        )
+
+        return beer_found
