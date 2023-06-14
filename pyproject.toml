@@ -7,6 +7,7 @@ authors = ["rviewer-team <dev@rviewer.io>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Django = "^4.1"
+asgiref = "^3.5.2"
 djangorestframework = "^3.13.1"
 psycopg2-binary = "^2.9.3"
 drf-yasg = "^1.20.0"
@@ -19,6 +20,7 @@ coverage = "^6.3.1"
 faker = "^5.0.0"
 pytest = "^7.3.2"
 pytest-django = "^4.5.2"
+pytest-asyncio = "^0.19.0"
 
 [tool.django-stubs]
 django_settings_module = "app.settings.base"
