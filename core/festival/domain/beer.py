@@ -53,6 +53,10 @@ class Beer:
     def name(self) -> BeerName:
         return self._name
 
+    @property
+    def price(self) -> float:
+        return self._price
+
 
 class BeerFactory:
     @staticmethod
