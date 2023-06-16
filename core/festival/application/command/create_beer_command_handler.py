@@ -2,7 +2,7 @@ from result import Err, Ok, Result
 from core.festival.domain.beer import BeerFactory
 from core.festival.domain.beer_repository import BeerRepository
 from core.festival.domain.errors import BeerError
-from festival.cqrs.models import CommandHandler
+from app.cqrs.models import CommandHandler
 from .create_beer_command import CreateBeerCommand
 
 
@@ -19,6 +19,6 @@ class CreateBeerCommandHandler(CommandHandler[CreateBeerCommand]):
         if isinstance(beer, Err):
             return beer.err()
 
-        await self._beer_repository.save(beer)
+        await self._beer_repository.save(beer.ok())
         
         return Ok()

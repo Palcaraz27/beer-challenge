@@ -1,4 +1,4 @@
-from festival.cqrs.models import DomainError
+from app.cqrs.models import DomainError
 
 
 class BeerError(DomainError):
