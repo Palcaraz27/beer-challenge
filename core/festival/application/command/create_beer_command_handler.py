@@ -2,7 +2,7 @@ from result import Err, Ok, Result
 from core.festival.domain.beer import BeerFactory
 from core.festival.domain.beer_repository import BeerRepository
 from core.festival.domain.errors import BeerError
-from core.utils.models import CommandHandler
+from festival.cqrs.models import CommandHandler
 from .create_beer_command import CreateBeerCommand
 
 

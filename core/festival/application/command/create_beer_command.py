@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from core.utils.models import Command
+from festival.cqrs.models import Command
 
 
 @dataclass(frozen=True)
