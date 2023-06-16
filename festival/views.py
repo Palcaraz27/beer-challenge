@@ -1,5 +1,4 @@
 import json
-# from django.http import HttpResponse, HttpResponseBadRequest
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -7,7 +6,6 @@ from result import Err
 
 from app.cqrs.dispatcher import command_bus
 from core.festival.application.command.create_beer_command import CreateBeerCommand
-
 
 class BeerView(APIView):
     def post(self, request) -> Response:
