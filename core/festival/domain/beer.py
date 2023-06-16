@@ -41,8 +41,8 @@ class Beer:
     _price: float
 
     def __init__(self, id: BeerId, name: BeerName, price: float) -> None:
-        self._id = id,
-        self._name = name,
+        self._id = id
+        self._name = name
         self._price = price
 
     @property
