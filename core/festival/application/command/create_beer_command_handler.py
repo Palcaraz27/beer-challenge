@@ -17,7 +17,7 @@ class CreateBeerCommandHandler(CommandHandler[CreateBeerCommand]):
         beer = BeerFactory.build(name=beer_name, price=beer_price)
 
         if isinstance(beer, Err):
-            return beer.err()
+            return beer
 
         await self._beer_repository.save(beer.ok())
         
