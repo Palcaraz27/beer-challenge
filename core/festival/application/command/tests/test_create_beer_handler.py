@@ -1,5 +1,6 @@
 import pytest
 from result import Err, Ok
+
 from core.festival.application.command.create_beer_command import CreateBeerCommand
 from core.festival.application.command.create_beer_command_handler import CreateBeerCommandHandler
 from core.festival.domain.errors import BeerError
