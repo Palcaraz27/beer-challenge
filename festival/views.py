@@ -9,6 +9,7 @@ from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command.create_beer_command import CreateBeerCommand
+from core.festival.application.query.get_beer_by_id_query import GetBeerByIdQuery
 from core.festival.application.query.get_beers_query import GetBeersQuery
 from festival.serializers import RequestBeerSerializer
 
@@ -41,5 +42,21 @@ class BeerView(APIView):
             logger.warning("Error getting beers: {error}".format(error=response.err().message))
             return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
 
-        logger.info("Successful beer request.")
+        logger.info("Successful beers request.")
         return Response({"success": True, "beers": [store.to_json() for store in response.ok()]}, status=status.HTTP_200_OK)
+
+
+class BeerByIdView(APIView):
+    def get(self, request, id) -> Response:
+        response = query_bus.dispatch(GetBeerByIdQuery(id=id))
+
+        if isinstance(response, Err):
+            logger.warning("Error getting beer by id: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        if response.ok() == None:
+            logger.info("Successful beer by id request but it not found.")
+            Response({"success": True, "beer": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+        logger.info("Successful beer by id request.")
+        return Response({"success": True, "beer": response.ok().to_json()}, status=status.HTTP_200_OK)
