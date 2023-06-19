@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from result import Err, Ok, Result
 
-from .errors import BeerError, BeerNameLenghtRuleError, InvalidBeerIdError
+from .errors import BeerError, BeerNameLenghtRuleError, BeerPriceRuleError, InvalidBeerIdError
 
 
 BEER_NAME_MAX_LENGHT = 20
@@ -63,5 +63,8 @@ class BeerFactory:
     def build(name: str, price: float) -> Result[Beer, BeerError]:
         if not (0 < len(name) <= BEER_NAME_MAX_LENGHT):
             return Err(BeerNameLenghtRuleError())
+
+        if price <= 0:
+            return Err(BeerPriceRuleError())
 
         return Ok(Beer(id=BeerId.random(), name=BeerName(name), price=price))

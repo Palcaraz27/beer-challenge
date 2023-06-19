@@ -14,3 +14,11 @@ class BeerNameLenghtRuleError(BeerError):
 
     def __str__(self) -> str:
         return self.message
+
+
+class BeerPriceRuleError(BeerError):
+    def __init__(self) -> None:
+            super().__init__(message=f"Price must be greater than 0.")
+
+    def __str__(self) -> str:
+        return self.message
