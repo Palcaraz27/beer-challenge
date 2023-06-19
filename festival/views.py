@@ -1,6 +1,7 @@
 import json
 import logging
 
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -9,12 +10,14 @@ from result import Err
 from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command.create_beer_command import CreateBeerCommand
 from core.festival.application.query.get_beers_query import GetBeersQuery
+from festival.serializers import RequestBeerSerializer
 
 
 logger = logging.getLogger(__name__)
 
 
 class BeerView(APIView):
+    @swagger_auto_schema(request_body=RequestBeerSerializer)
     def post(self, request) -> Response:
         body = json.loads(request.body)
 
