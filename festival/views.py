@@ -9,8 +9,7 @@ from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command.create_beer_command import CreateBeerCommand
-from core.festival.application.query.get_beer_by_id_query import GetBeerByIdQuery
-from core.festival.application.query.get_beers_query import GetBeersQuery
+from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery
 from festival.serializers import RequestBeerSerializer
 
 
