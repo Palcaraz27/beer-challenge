@@ -19,3 +19,6 @@ class InMemoryBeerRepository(BeerRepository):
         )
 
         return beer_found
+
+    async def get_all(self) -> List[Beer]:
+        return self._beers

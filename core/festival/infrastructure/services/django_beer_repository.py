@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from core.festival.domain.beer import Beer, BeerId
 from core.festival.domain.beer_repository import BeerRepository
@@ -21,6 +21,9 @@ class DjangoBeerRepository(BeerRepository):
     async def get_by_id(self, beer_id: BeerId) -> Optional[Beer]:
         instance = await self._get_by_uuid(beer_uuid=beer_id.value)
         return self.mapper.to_domain(instance) if instance else None
+
+    async def get_all(self) -> List[Beer]:
+        return [self.mapper.to_domain(beer) async for beer in BeerModel.objects.all()]
 
     async def _get_by_uuid(self, beer_uuid: str) -> Optional[BeerModel]:
         try:
