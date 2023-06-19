@@ -15,7 +15,7 @@ async def test_get_beer_by_id_success() -> None:
     beer = BeerBuilder().build()
     beer_repository = InMemoryBeerRepository(beers=[beer])
     handler = GetBeerByIdQueryHandler(beer_repository)
-    query = GetBeerByIdQuery(id=beer.beer_id)
+    query = GetBeerByIdQuery(id=beer.beer_id.value)
 
     # Act
     result = await handler.handle(query)
