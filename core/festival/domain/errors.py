@@ -22,3 +22,8 @@ class BeerPriceRuleError(BeerError):
 
     def __str__(self) -> str:
         return self.message
+
+
+class BeerNotFoundError(BeerError):
+    def __init__(self, beer_id: str) -> None:
+        super().__init__(message=f"Beer with id {beer_id} not found.")
