@@ -13,3 +13,6 @@ class BeerRepository(Protocol):
 
     async def get_all(self) -> List[Beer]:
         raise NotImplementedError
+
+    async def delete(self, beer: Beer) -> None:
+        raise NotImplementedError
