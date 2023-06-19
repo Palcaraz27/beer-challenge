@@ -1,3 +1,4 @@
+import uuid
 import pytest
 
 from core.festival.tests.beer_builder import BeerBuilder
@@ -30,3 +31,27 @@ async def test_get_all_beers() -> None:
     # Assert
     assert result
     assert result[0] == beer
+
+@pytest.mark.asyncio
+async def test_get_by_id_beer_success() -> None:
+    # Arrange
+    beer = BeerBuilder().build()
+    repository = InMemoryBeerRepository(beers=[beer])
+
+    # Act
+    result = await repository.get_by_id(beer_id=beer.beer_id)
+
+    # Assert
+    assert result
+    assert result == beer
+
+@pytest.mark.asyncio
+async def test_get_by_id_beer_not_found() -> None:
+    # Arrange
+    repository = InMemoryBeerRepository(beers=[])
+
+    # Act
+    result = await repository.get_by_id(beer_id=uuid.uuid4())
+
+    # Assert
+    assert result == None
