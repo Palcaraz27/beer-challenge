@@ -25,6 +25,14 @@ class DjangoBeerRepository(BeerRepository):
     async def get_all(self) -> List[Beer]:
         return [self.mapper.to_domain(beer) async for beer in BeerModel.objects.all()]
 
+    async def delete(self, beer: Beer) -> None:
+        original_instance = await self._get_by_uuid(beer.beer_id.value)
+
+        if original_instance is None:
+            return original_instance
+
+        await self._remove_beer(beer=original_instance)
+
     async def _get_by_uuid(self, beer_uuid: str) -> Optional[BeerModel]:
         try:
             instance = await BeerModel.objects.aget(uuid=beer_uuid)
@@ -38,3 +46,6 @@ class DjangoBeerRepository(BeerRepository):
             name=beer.name.value,
             price=beer.price
         )
+
+    async def _remove_beer(self, beer: BeerModel) -> None:
+        await beer.adelete()

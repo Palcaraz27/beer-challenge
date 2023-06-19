@@ -22,3 +22,7 @@ class InMemoryBeerRepository(BeerRepository):
 
     async def get_all(self) -> List[Beer]:
         return self._beers
+
+    async def delete(self, beer: Beer) -> None:
+        if beer in self._beers:
+            self._beers.remove(beer)
