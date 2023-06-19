@@ -1,5 +1,5 @@
 import pytest
-from result import Ok
+from result import Err, Ok
 from core.festival.application.command.create_beer_command import CreateBeerCommand
 from core.festival.application.command.create_beer_command_handler import CreateBeerCommandHandler
 from core.festival.domain.errors import BeerError
@@ -30,4 +30,19 @@ async def test_create_beer_with_invalid_name() -> None:
     result = await handler.handle(command)
 
     # Assert
-    assert isinstance(result, BeerError)
+    assert isinstance(result, Err)
+    assert isinstance(result.err(), BeerError)
+
+@pytest.mark.asyncio
+async def test_create_beer_with_invalid_price() -> None:
+    # Arrange
+    beer_repository = InMemoryBeerRepository(beers=[])
+    handler = CreateBeerCommandHandler(beer_repository)
+    command = CreateBeerCommand(name="test", price=0)
+
+    # Act
+    result = await handler.handle(command)
+
+    # Assert
+    assert isinstance(result, Err)
+    assert isinstance(result.err(), BeerError)
