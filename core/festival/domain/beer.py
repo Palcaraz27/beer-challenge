@@ -1,3 +1,4 @@
+from typing import Any, Dict
 import uuid
 from dataclasses import dataclass
 
@@ -56,6 +57,13 @@ class Beer:
     @property
     def price(self) -> float:
         return self._price
+
+    def to_json(self) -> Dict[str, Any]:
+        return {
+            "id": self._id.value,
+            "name": self._name.value,
+            "price": self._price
+        }
 
 
 class BeerFactory:

@@ -1,3 +1,4 @@
+from dataclasses import asdict
 import json
 import logging
 
@@ -6,8 +7,9 @@ from rest_framework import status
 from rest_framework.views import APIView
 from result import Err
 
-from app.cqrs.dispatcher import command_bus
+from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command.create_beer_command import CreateBeerCommand
+from core.festival.application.query.get_beers_query import GetBeersQuery
 
 
 logger = logging.getLogger(__name__)
@@ -29,3 +31,13 @@ class BeerView(APIView):
 
         logger.info("Beer created: {name}".format(name=body.get("name")))
         return Response({"success": True}, status=status.HTTP_201_CREATED)
+
+    def get(self, request) -> Response:
+        response = query_bus.dispatch(GetBeersQuery())
+
+        if isinstance(response, Err):
+            logger.warning("Error getting beers: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Successful beer request.")
+        return Response({"success": True, "beers": [store.to_json() for store in response.ok()]}, status=status.HTTP_200_OK)
