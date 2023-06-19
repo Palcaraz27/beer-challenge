@@ -55,3 +55,28 @@ async def test_get_by_id_beer_not_found() -> None:
 
     # Assert
     assert result == None
+
+@pytest.mark.asyncio
+async def test_remove_beer_success() -> None:
+    # Arrange
+    beer = BeerBuilder().build()
+    repository = InMemoryBeerRepository(beers=[beer])
+
+    # Act
+    await repository.delete(beer)
+
+    # Assert
+    assert len(repository._beers) == 0
+
+@pytest.mark.asyncio
+async def test_remove_beer_not_found() -> None:
+    # Arrange
+    beer = BeerBuilder().build()
+    beer_to_remove = BeerBuilder().build()
+    repository = InMemoryBeerRepository(beers=[beer])
+
+    # Act
+    await repository.delete(beer_to_remove)
+
+    # Assert
+    assert len(repository._beers) == 1

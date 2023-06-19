@@ -57,4 +57,18 @@ class DjangoRepositoryTestCase(TestCase):
         result = await django_repository.get_by_id(beer_id=BeerId(uuid.uuid4()))
 
         # Assert
-        assert result == None
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_delete_beer(self) -> None:
+        # Arrange
+        django_repository = DjangoBeerRepository()
+        beer = BeerBuilder().build()
+        await django_repository.save(beer)
+
+        # Act
+        await django_repository.delete(beer)
+
+        # Assert
+        beer_found = await django_repository.get_by_id(beer_id=beer.beer_id)
+        assert beer_found is None
