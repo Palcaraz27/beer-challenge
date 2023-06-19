@@ -7,9 +7,8 @@ from core.festival.infrastructure.services.inmemory_beer_repository import InMem
 from core.festival.tests.beer_builder import BeerBuilder
 
 
-
 @pytest.mark.asyncio
-async def test_create_beer_success() -> None:
+async def test_get_all_beers_success() -> None:
     # Arrange
     beer = BeerBuilder().build()
     beer_repository = InMemoryBeerRepository(beers=[beer])
