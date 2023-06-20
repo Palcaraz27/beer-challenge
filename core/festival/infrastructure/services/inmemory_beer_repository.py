@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 from core.festival.domain.beer import Beer, BeerId
 from core.festival.domain.beer_repository import BeerRepository
 
