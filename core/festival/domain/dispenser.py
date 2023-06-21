@@ -37,14 +37,23 @@ class Dispenser:
     _total_open_time: time
     _open_time: Optional[datetime]
 
-    def __init__(self, id: DispenserId, beer_id: BeerId, flow_volume: float) -> None:
+    def __init__(
+        self,
+        id: DispenserId,
+        beer_id: BeerId,
+        flow_volume: float,
+        is_open: Optional[bool] = False,
+        openings: Optional[int] = 0,
+        total_open_time: Optional[time] = time(0, 0 ,0),
+        open_time: Optional[datetime] = None
+    ) -> None:
         self._id = id
         self._beer_id = beer_id
         self._flow_volume = flow_volume
-        self._is_open = False
-        self._openings = 0
-        self._total_open_time = time(0, 0 ,0)
-        self._open_time = None
+        self._is_open = is_open
+        self._openings = openings
+        self._total_open_time = total_open_time
+        self._open_time = open_time
 
     @property
     def dispenser_id(self) -> DispenserId:
