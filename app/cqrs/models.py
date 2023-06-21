@@ -33,5 +33,13 @@ class CommandHandler(Protocol[T_contra]):
         raise NotImplementedError
 
 
+class QueryHandler(Protocol[T_contra]):
+    """Base handler class."""
+
+    @abstractmethod
+    async def handle(self, query: T_contra) -> Any:
+        """Handle the query."""
+        raise NotImplementedError
+
+
 Query = Command
-QueryHandler = CommandHandler
