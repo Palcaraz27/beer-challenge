@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import List, Optional
 
 from core.festival.domain.dispenser import Dispenser, DispenserId
 from core.festival.domain.dispenser_repository import DispenserRepository
@@ -27,6 +27,9 @@ class DjangoDispenserRepository(DispenserRepository):
     async def get_by_id(self, dispenser_id: DispenserId) -> Optional[Dispenser]:
         instance = await self._get_by_uuid(dispenser_id.value)
         return self.mapper.to_domain(instance) if instance else None
+
+    async def get_all(self) -> List[Dispenser]:
+        return [self.mapper.to_domain(dispenser) async for dispenser in DispenserModel.objects.select_related("beer").all()]
 
     async def _get_by_uuid(self, dispenser_uuid: str) -> Optional[DispenserModel]:
         try:
