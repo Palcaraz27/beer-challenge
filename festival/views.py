@@ -9,7 +9,7 @@ from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command import CreateBeerCommand, RemoveBeerCommand, CreateDispenserCommand
-from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery, GetDispensersQuery
+from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery, GetDispensersQuery, GetDispenserByIdQuery
 from festival.serializers import RequestBeerSerializer, RequestDispenserSerializer
 
 
@@ -64,9 +64,9 @@ class BeerByIdView(APIView):
             logger.warning("Error getting beer by id: {error}".format(error=response.err().message))
             return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
 
-        if response.ok() == None:
+        if response.ok() is None:
             logger.info("Successful beer by id request but it not found.")
-            Response({"success": True, "beer": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"success": True, "beer": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
 
         logger.info("Successful beer by id request.")
         return Response({"success": True, "beer": response.ok().to_json()}, status=status.HTTP_200_OK)
@@ -105,3 +105,19 @@ class DispenserView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+
+class DispenserByIdView(APIView):
+    def get(self, request, id) -> Response:
+        response = query_bus.dispatch(GetDispenserByIdQuery(id=id))
+
+        if isinstance(response, Err):
+            logger.warning("Error getting dispenser by id: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        if response.ok() is None:
+            logger.info("Successful dispenser by id request but it not found.")
+            return Response({"success": True, "dispenser": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+        logger.info("Successful dispenser by id request.")
+        return Response({"success": True, "dispenser": response.ok().to_json()}, status=status.HTTP_200_OK)
