@@ -8,9 +8,9 @@ from rest_framework.views import APIView
 from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
-from core.festival.application.command import CreateBeerCommand, RemoveBeerCommand
+from core.festival.application.command import CreateBeerCommand, RemoveBeerCommand, CreateDispenserCommand
 from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery
-from festival.serializers import RequestBeerSerializer
+from festival.serializers import RequestBeerSerializer, RequestDispenserSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -70,3 +70,22 @@ class BeerByIdView(APIView):
 
         logger.info("Successful beer by id request.")
         return Response({"success": True, "beer": response.ok().to_json()}, status=status.HTTP_200_OK)
+
+
+class DispenserView(APIView):
+    @swagger_auto_schema(request_body=RequestDispenserSerializer)
+    def post(self, request) -> Response:
+        body = json.loads(request.body)
+
+        response = command_bus.dispatch(CreateDispenserCommand(
+            beer_id=body.get("beer_id", ""),
+            flow_volume=body.get("flow_volume", 0),
+            )
+        )
+
+        if isinstance(response, Err):
+            logger.warning("Error creating dispenser: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Dispenser created")
+        return Response({"success": True}, status=status.HTTP_201_CREATED)
