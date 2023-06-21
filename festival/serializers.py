@@ -6,3 +6,8 @@ from rest_framework import serializers
 class RequestBeerSerializer(serializers.Serializer):
     name = serializers.CharField()
     price = serializers.FloatField()
+
+
+class RequestDispenserSerializer(serializers.Serializer):
+    beer_id = serializers.CharField()
+    flow_volume = serializers.FloatField()
