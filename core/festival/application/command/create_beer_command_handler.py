@@ -1,4 +1,5 @@
 from result import Err, Ok, Result
+
 from core.festival.domain.beer import BeerFactory
 from core.festival.domain.beer_repository import BeerRepository
 from core.festival.domain.errors import BeerError
