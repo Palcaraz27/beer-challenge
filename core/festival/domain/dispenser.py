@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime, time
-from typing import Optional
+from typing import Any, Dict, Optional
 import uuid
 
 from result import Err, Ok, Result
@@ -102,6 +102,17 @@ class Dispenser:
         self._open_time = None
 
         return Ok()
+
+    def to_json(self) -> Dict[str, Any]:
+        return {
+            "id": self._id.value,
+            "beer_id": self._beer_id.value,
+            "flow_volume": self._flow_volume,
+            "is_open": self._is_open,
+            "openings": self._openings,
+            "total_open_time": self._total_open_time,
+            "open_time": self._open_time
+        }
 
     def _calculate_open_time(self) -> time:
         open_time = datetime.now() - self._open_time

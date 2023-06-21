@@ -9,7 +9,7 @@ from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command import CreateBeerCommand, RemoveBeerCommand, CreateDispenserCommand
-from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery
+from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery, GetDispensersQuery
 from festival.serializers import RequestBeerSerializer, RequestDispenserSerializer
 
 
@@ -42,7 +42,7 @@ class BeerView(APIView):
             return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
 
         logger.info("Successful beers request.")
-        return Response({"success": True, "beers": [store.to_json() for store in response.ok()]}, status=status.HTTP_200_OK)
+        return Response({"success": True, "beers": [beer.to_json() for beer in response.ok()]}, status=status.HTTP_200_OK)
 
     def delete(self, request) -> Response:
         body = json.loads(request.body)
@@ -89,3 +89,19 @@ class DispenserView(APIView):
 
         logger.info("Dispenser created")
         return Response({"success": True}, status=status.HTTP_201_CREATED)
+
+    def get(self, request) -> Response:
+        response = query_bus.dispatch(GetDispensersQuery())
+
+        if isinstance(response, Err):
+            logger.warning("Error getting dispensers: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Successful dispensers request.")
+        return Response(
+            {
+                "success": True,
+                "dispensers": [dispenser.to_json() for dispenser in response.ok()]
+            },
+            status=status.HTTP_200_OK
+        )
