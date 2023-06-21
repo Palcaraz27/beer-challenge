@@ -6,6 +6,7 @@ from result import Result
 
 from app.cqrs.models import R, Command, CommandHandler, DomainError, Query, QueryHandler
 from app.cqrs.beer import command_handlers as beer_command_handlers, query_handlers as beer_query_handlers
+from app.cqrs.dispenser import command_handlers as dispenser_command_handlers
 
 
 @dataclass
@@ -33,7 +34,7 @@ class QueryDispatcher:
 
 
 command_bus = CommandDispatcher(
-    handlers={**beer_command_handlers},
+    handlers={**beer_command_handlers, **dispenser_command_handlers},
 )
 query_bus = QueryDispatcher(
     handlers={**beer_query_handlers},
