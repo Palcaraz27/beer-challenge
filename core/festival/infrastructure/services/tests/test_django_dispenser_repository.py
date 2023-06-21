@@ -1,7 +1,9 @@
+import uuid
 import pytest
 from django.test import TestCase
 from asgiref.sync import async_to_sync
 
+from core.festival.domain.dispenser import DispenserId
 from core.festival.infrastructure.services.django_beer_repository import DjangoBeerRepository
 from core.festival.infrastructure.services.django_dispenser_repository import DjangoDispenserRepository
 from core.festival.tests.beer_builder import BeerBuilder
@@ -43,3 +45,27 @@ class DjangoRepositoryTestCase(TestCase):
 
         # Assert
         assert len(result) == 1
+
+    @pytest.mark.asyncio
+    async def test_get_by_id_success(self) -> None:
+        # Arrange
+        django_repository = DjangoDispenserRepository()
+        dispenser = DispenserBuilder().build_with_beer(self.beer.beer_id.value)
+        await django_repository.save(dispenser)
+
+        # Act
+        result = await django_repository.get_by_id(dispenser_id=dispenser.dispenser_id)
+
+        # Assert
+        assert result
+
+    @pytest.mark.asyncio
+    async def test_get_by_id_not_found(self) -> None:
+        # Arrange
+        django_repository = DjangoDispenserRepository()
+
+        # Act
+        result = await django_repository.get_by_id(dispenser_id=DispenserId(uuid.uuid4()))
+
+        # Assert
+        assert result is None
