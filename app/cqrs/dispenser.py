@@ -2,6 +2,8 @@ from typing import Dict
 
 from app.cqrs.models import Command, CommandHandler, Query, QueryHandler
 from core.festival.application.command import (
+    CloseDispenserCommand,
+    CloseDispenserCommandHandler,
     CreateDispenserCommand,
     CreateDispenserCommandHandler,
     OpenDispenserCommand,
@@ -18,6 +20,9 @@ from core.festival.infrastructure.services.django_dispenser_repository import Dj
 django_dispenser_repository = DjangoDispenserRepository()
 
 command_handlers: Dict[Command, CommandHandler] = {
+    CloseDispenserCommand: CloseDispenserCommandHandler(
+        dispenser_repository=django_dispenser_repository
+    ),
     CreateDispenserCommand: CreateDispenserCommandHandler(
         dispenser_repository=django_dispenser_repository
     ),
