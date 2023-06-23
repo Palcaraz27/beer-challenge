@@ -16,3 +16,6 @@ class DispenserRepository(Protocol):
 
     async def delete(self, dispenser: Dispenser) -> None:
         raise NotImplementedError
+
+    async def update(self, dispenser: Dispenser) -> None:
+        raise NotImplementedError

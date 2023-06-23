@@ -64,4 +64,9 @@ class DispenserIsCloseRuleError(DispenserError):
     def __str__(self) -> str:
         return self.message
 
+
+class DispenserNotFoundError(BeerError):
+    def __init__(self, dispenser_id: str) -> None:
+        super().__init__(message=f"Dispenser with id {dispenser_id} not found.")
+
 # endregion

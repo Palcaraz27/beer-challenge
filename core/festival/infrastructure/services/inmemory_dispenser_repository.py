@@ -5,8 +5,8 @@ from core.festival.domain.dispenser_repository import DispenserRepository
 
 
 class InMemoryDispenserRepository(DispenserRepository):
-    def __init__(self, dipensers: List[Dispenser]) -> None:
-        self._dispensers = dipensers or []
+    def __init__(self, dispensers: List[Dispenser]) -> None:
+        self._dispensers = dispensers or []
 
     async def save(self, dispenser: Dispenser) -> None:
         dispenser_found = next(filter(lambda s: dispenser.dispenser_id == s.dispenser_id, self._dispensers), None)
@@ -27,3 +27,13 @@ class InMemoryDispenserRepository(DispenserRepository):
     async def delete(self, dispenser: Dispenser) -> None:
         if dispenser in self._dispensers:
             self._dispensers.remove(dispenser)
+
+    async def update(self, dispenser: Dispenser) -> None:
+        dispenser_id = dispenser.dispenser_id.value
+        old_dispenser = await self.get_by_id(DispenserId(dispenser_id))
+
+        if old_dispenser:
+            return None
+
+        index = self._dispensers.index(old_dispenser)
+        self._dispensers[index] = dispenser

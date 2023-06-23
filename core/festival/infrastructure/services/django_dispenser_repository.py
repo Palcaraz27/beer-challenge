@@ -52,3 +52,15 @@ class DjangoDispenserRepository(DispenserRepository):
             flow_volume=dispenser.flow_volume
         )
 
+    async def update(self, dispenser_updated: Dispenser) -> None:
+        dispenser = await self._get_by_uuid(dispenser_updated.dispenser_id.value)
+
+        if not dispenser:
+            return None
+        
+        dispenser.is_open = dispenser_updated.is_open
+        dispenser.openings = dispenser_updated.openings
+        dispenser.open_time = dispenser_updated.open_time
+        dispenser.total_open_time = dispenser_updated.total_open_time
+
+        await dispenser.asave()
