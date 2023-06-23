@@ -8,8 +8,18 @@ from rest_framework.views import APIView
 from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
-from core.festival.application.command import CreateBeerCommand, RemoveBeerCommand, CreateDispenserCommand
-from core.festival.application.query import GetBeerByIdQuery, GetBeersQuery, GetDispensersQuery, GetDispenserByIdQuery
+from core.festival.application.command import (
+    CreateBeerCommand,
+    CreateDispenserCommand,
+    OpenDispenserCommand,
+    RemoveBeerCommand,
+)
+from core.festival.application.query import (
+    GetBeerByIdQuery,
+    GetBeersQuery,
+    GetDispensersQuery,
+    GetDispenserByIdQuery
+)
 from festival.serializers import RequestBeerSerializer, RequestDispenserSerializer
 
 
@@ -121,3 +131,15 @@ class DispenserByIdView(APIView):
 
         logger.info("Successful dispenser by id request.")
         return Response({"success": True, "dispenser": response.ok().to_json()}, status=status.HTTP_200_OK)
+
+
+class DispenserOpenView(APIView):
+    def post(self, request, id) -> Response:
+        response = command_bus.dispatch(OpenDispenserCommand(id=id))
+
+        if isinstance(response, Err):
+            logger.warning("Error opening dispenser by id: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Successful open dispenser by {id} request.".format(id=id))
+        return Response({"success": True}, status=status.HTTP_200_OK)
