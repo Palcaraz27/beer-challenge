@@ -9,6 +9,7 @@ from result import Err
 
 from app.cqrs.dispatcher import command_bus, query_bus
 from core.festival.application.command import (
+    CloseDispenserCommand,
     CreateBeerCommand,
     CreateDispenserCommand,
     OpenDispenserCommand,
@@ -142,4 +143,16 @@ class DispenserOpenView(APIView):
             return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
 
         logger.info("Successful open dispenser by {id} request.".format(id=id))
+        return Response({"success": True}, status=status.HTTP_200_OK)
+
+
+class DispenserCloseView(APIView):
+    def post(self, request, id) -> Response:
+        response = command_bus.dispatch(CloseDispenserCommand(id=id))
+
+        if isinstance(response, Err):
+            logger.warning("Error closing dispenser by id: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Successful close dispenser by {id} request.".format(id=id))
         return Response({"success": True}, status=status.HTTP_200_OK)
