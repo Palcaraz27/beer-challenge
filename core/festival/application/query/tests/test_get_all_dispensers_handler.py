@@ -10,7 +10,7 @@ from core.festival.tests.dispenser_builder import DispenserBuilder
 async def test_get_all_dispensers_success() -> None:
     # Arrange
     dispenser = DispenserBuilder().build()
-    beer_repository = InMemoryDispenserRepository(dipensers=[dispenser])
+    beer_repository = InMemoryDispenserRepository(dispensers=[dispenser])
     handler = GetDispensersQueryHandler(beer_repository)
     query = GetDispensersQuery()
 

@@ -9,7 +9,7 @@ from ..inmemory_dispenser_repository import InMemoryDispenserRepository
 async def test_save_new_dipenser() -> None:
     # Arrange
     dispenser = DispenserBuilder().build()
-    repository = InMemoryDispenserRepository(dipensers=[])
+    repository = InMemoryDispenserRepository(dispensers=[])
 
     # Act
     await repository.save(dispenser)
@@ -23,7 +23,7 @@ async def test_save_new_dipenser() -> None:
 async def test_get_all_dispensers() -> None:
     # Arrange
     dispenser = DispenserBuilder().build()
-    repository = InMemoryDispenserRepository(dipensers=[dispenser])
+    repository = InMemoryDispenserRepository(dispensers=[dispenser])
 
     # Act
     result = await repository.get_all()
@@ -36,7 +36,7 @@ async def test_get_all_dispensers() -> None:
 async def test_get_by_id_dispenser_success() -> None:
     # Arrange
     dispenser = DispenserBuilder().build()
-    repository = InMemoryDispenserRepository(dipensers=[dispenser])
+    repository = InMemoryDispenserRepository(dispensers=[dispenser])
 
     # Act
     result = await repository.get_by_id(dispenser_id=dispenser.dispenser_id)
@@ -48,7 +48,7 @@ async def test_get_by_id_dispenser_success() -> None:
 @pytest.mark.asyncio
 async def test_get_by_id_dispenser_not_found() -> None:
     # Arrange
-    repository = InMemoryDispenserRepository(dipensers=[])
+    repository = InMemoryDispenserRepository(dispensers=[])
 
     # Act
     result = await repository.get_by_id(dispenser_id=uuid.uuid4())
@@ -60,7 +60,7 @@ async def test_get_by_id_dispenser_not_found() -> None:
 async def test_remove_dispenser_success() -> None:
     # Arrange
     dispenser = DispenserBuilder().build()
-    repository = InMemoryDispenserRepository(dipensers=[dispenser])
+    repository = InMemoryDispenserRepository(dispensers=[dispenser])
 
     # Act
     await repository.delete(dispenser)
@@ -73,7 +73,7 @@ async def test_remove_dispenser_not_found() -> None:
     # Arrange
     dispenser = DispenserBuilder().build()
     dispenser_to_remove = DispenserBuilder().build()
-    repository = InMemoryDispenserRepository(dipensers=[dispenser])
+    repository = InMemoryDispenserRepository(dispensers=[dispenser])
 
     # Act
     await repository.delete(dispenser_to_remove)
@@ -81,3 +81,18 @@ async def test_remove_dispenser_not_found() -> None:
     # Assert
     assert len(repository._dispensers) == 1
 
+@pytest.mark.asyncio
+async def test_update_dispenser_success() -> None:
+    # Arrange
+    dispenser = DispenserBuilder().build()
+    repository = InMemoryDispenserRepository(dispensers=[dispenser])
+    dispenser.open_dispenser()
+
+    # Act
+    await repository.update(dispenser=dispenser)
+
+    # Assert
+    open_dispenser = repository._dispensers[0]
+    assert open_dispenser.is_open == True
+    assert open_dispenser.openings == 1
+    assert open_dispenser.open_time != None
