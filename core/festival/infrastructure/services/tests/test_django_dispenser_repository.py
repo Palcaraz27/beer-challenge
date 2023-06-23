@@ -69,3 +69,19 @@ class DjangoRepositoryTestCase(TestCase):
 
         # Assert
         assert result is None
+
+    @pytest.mark.asyncio
+    async def test_update_dispenser_success(self) -> None:
+        # Arrange
+        django_repository = DjangoDispenserRepository()
+        dispenser = DispenserBuilder().build_with_beer(self.beer.beer_id.value)
+        await django_repository.save(dispenser)
+        dispenser.open_dispenser()
+
+        # Act
+        await django_repository.update(dispenser)
+
+        # Assert
+        assert dispenser.is_open == True
+        assert dispenser.openings == 1
+        assert dispenser.open_time != None
