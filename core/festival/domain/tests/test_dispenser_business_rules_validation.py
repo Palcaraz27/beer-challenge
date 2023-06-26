@@ -83,4 +83,12 @@ def test_close_dispenser_when_the_dispenser_is_already_close() -> None:
     assert isinstance(result, Err)
     assert isinstance(result.err(), DispenserIsCloseRuleError)
 
-    
+def test_get_dispenser_profit_success() -> None:
+    # Arrange
+    dispenser = DispenserOpenBuilder().build()
+
+    # Act
+    result = dispenser.profit(price=1)
+
+    # Assert
+    assert result > 0

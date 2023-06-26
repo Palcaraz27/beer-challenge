@@ -83,6 +83,13 @@ class Dispenser:
     def total_open_time(self) -> time:
         return self._total_open_time
 
+    def profit(self, price: float) -> float:
+        total_seconds = self._total_open_time.hour * 3600 + self._total_open_time.minute * 60 + self._total_open_time.second
+        if self._open_time is not None:
+            time_left = self._calculate_open_time()
+            total_seconds += (time_left.hour * 3600 + time_left.minute * 60 + time_left.second)
+        return total_seconds * price
+
     def open_dispenser(self) -> Result[None, DispenserError]:
         if self._is_open:
             return Err(DispenserIsOpenRuleError())
