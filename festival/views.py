@@ -19,7 +19,8 @@ from core.festival.application.query import (
     GetBeerByIdQuery,
     GetBeersQuery,
     GetDispensersQuery,
-    GetDispenserByIdQuery
+    GetDispenserByIdQuery,
+    GetDispenserProfitInfoQuery
 )
 from festival.serializers import RequestBeerSerializer, RequestDispenserSerializer
 
@@ -156,3 +157,15 @@ class DispenserCloseView(APIView):
 
         logger.info("Successful close dispenser by {id} request.".format(id=id))
         return Response({"success": True}, status=status.HTTP_200_OK)
+
+
+class DispenserProfitView(APIView):
+    def get(self, request, id) -> Response:
+        response = query_bus.dispatch(GetDispenserProfitInfoQuery(id=id))
+
+        if isinstance(response, Err):
+            logger.warning("Error getting dispenser by id: {error}".format(error=response.err().message))
+            return Response(response.err().message, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.info("Successful get profit info dispenser by {id} request.".format(id=id))
+        return Response({"success": True, "dispenser": response.ok().to_json()}, status=status.HTTP_200_OK)
