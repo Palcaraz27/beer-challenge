@@ -13,11 +13,16 @@ from core.festival.application.query import (
     GetDispensersQuery,
     GetDispensersQueryHandler,
     GetDispenserByIdQuery,
-    GetDispenserByIdQueryHandler)
+    GetDispenserByIdQueryHandler,
+    GetDispenserProfitInfoQuery,
+    GetDispenserProfitInfoQueryHandler
+)
+from core.festival.infrastructure.services.django_beer_repository import DjangoBeerRepository
 from core.festival.infrastructure.services.django_dispenser_repository import DjangoDispenserRepository
 
 
 django_dispenser_repository = DjangoDispenserRepository()
+django_beer_repository = DjangoBeerRepository()
 
 command_handlers: Dict[Command, CommandHandler] = {
     CloseDispenserCommand: CloseDispenserCommandHandler(
@@ -37,5 +42,8 @@ query_handlers: Dict[Query, QueryHandler] = {
     ),
     GetDispenserByIdQuery: GetDispenserByIdQueryHandler(
         dispenser_repository=django_dispenser_repository
+    ),
+    GetDispenserProfitInfoQuery: GetDispenserProfitInfoQueryHandler(
+        dispenser_repository=django_dispenser_repository, beer_repository=django_beer_repository
     ),
 }
